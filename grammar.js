@@ -45,7 +45,7 @@ module.exports = grammar({
     [$._struct_identifier, $._function_identifier],
     [$.function_type_params],
     // [$.name_expression, $.quantifier_expression],
-    [$.name_expression],
+    [$.name_expression, $.pack_expression, $.call_expression],
   ],
 
   rules: {
@@ -560,7 +560,8 @@ module.exports = grammar({
       optional(field('type_arguments', $.type_arguments))
     )),
     pack_expression: $ => seq(
-      $.name_expression,
+      field('module_access', $.module_access),
+      optional(field('type_arguments', $.type_arguments)),
       field('body', $.field_initialize_list),
     ),
     field_initialize_list: $ => seq(
@@ -570,7 +571,8 @@ module.exports = grammar({
     ),
 
     call_expression: $ => prec(PREC.call, seq(
-      $.name_expression,
+      field('module_access', $.module_access),
+      optional(field('type_arguments', $.type_arguments)),
       field('args', $.arg_list),
     )),
     arg_list: $ => seq(
